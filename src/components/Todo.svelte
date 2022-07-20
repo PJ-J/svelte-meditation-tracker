@@ -18,7 +18,7 @@
           todo.completed ? 'line-through' : ''
       }`}
   >
-      {todo.text}
+      {todo.minutes}, {todo.created_at}
   </span>
   <button
       type="button"
