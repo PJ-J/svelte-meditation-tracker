@@ -1,6 +1,10 @@
 <script>
   export let todo;
+import Index from '../routes/index.svelte';
   import {deleteTodo, toggleTodoCompleted} from '../stores/todoStore.js';
+import TodoForm from './TodoForm.svelte';
+import format from 'date-fns/format';
+
   
 </script>
 
@@ -18,7 +22,7 @@
           todo.completed ? 'line-through' : ''
       }`}
   >
-      {todo.minutes / 60} hour, {todo.created_at}
+      {(todo.minutes / 60).toFixed(2)} hour(s), {format((new Date(todo.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}
   </span>
   <button
       type="button"
