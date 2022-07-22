@@ -5,6 +5,14 @@ import Index from '../routes/index.svelte';
 import TodoForm from './TodoForm.svelte';
 import format from 'date-fns/format';
 
+const minsOrHours = (minutes) => {
+    if (minutes < 60) {
+        return (todo.minutes + " minutes");
+    } else {
+        return ((todo.minutes / 60).toFixed(2) + " hour")
+    }
+}
+
   
 </script>
 
@@ -22,7 +30,7 @@ import format from 'date-fns/format';
           todo.completed ? 'line-through' : ''
       }`}
   >
-      {(todo.minutes / 60).toFixed(2)} hour(s), {format((new Date(todo.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}
+    {minsOrHours(todo.minutes)}, {format((new Date(todo.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}
   </span>
   <button
       type="button"
