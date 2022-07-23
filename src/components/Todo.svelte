@@ -1,9 +1,10 @@
 <script>
-  export let todo;
+export let todo;
 import Index from '../routes/index.svelte';
-  import {deleteTodo, toggleTodoCompleted} from '../stores/todoStore.js';
+import {deleteTodo, toggleTodoCompleted} from '../stores/todoStore.js';
 import TodoForm from './TodoForm.svelte';
 import format from 'date-fns/format';
+
 
 const minsOrHours = (minutes) => {
     if (minutes < 60) {
@@ -12,6 +13,10 @@ const minsOrHours = (minutes) => {
         return ((todo.minutes / 60).toFixed(2) + " hour")
     }
 }
+
+
+
+
 
   
 </script>

@@ -2,6 +2,17 @@ import { writable } from 'svelte/store';
 import {supabase} from "../supabase.js";
 export const todos = writable([]);
 
+// export const count = async () => {
+//     const {data, error, count} = await supabase
+//         .from('todo')
+//         .select({count: 'exact'})
+//     if(error) {
+//         return console.error(error);
+//     }
+//     return count;
+// }
+// count();
+
 export const loadTodos = async () => {
     const {data, error} = await supabase.from('todo').select();
     if(error) {
@@ -10,6 +21,7 @@ export const loadTodos = async () => {
     todos.set(data);
 }
 loadTodos();
+
 
 export const addTodo = async (minutes, user_id) => {
     const {data, error} = await supabase.from('todo').insert([{minutes, user_id}]);
