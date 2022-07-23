@@ -5,6 +5,7 @@ import {deleteTodo, toggleTodoCompleted} from '../stores/todoStore.js';
 import TodoForm from './TodoForm.svelte';
 import format from 'date-fns/format';
 
+
 const minsOrHours = (minutes) => {
     if (minutes < 60) {
         return (todo.minutes + " minutes");
@@ -12,6 +13,8 @@ const minsOrHours = (minutes) => {
         return ((todo.minutes / 60).toFixed(2) + " hour")
     }
 }
+
+
 
 
 
