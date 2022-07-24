@@ -5,23 +5,23 @@
 	import format from 'date-fns/format';
 	import compareDesc from 'date-fns/compareDesc';
 
-	$: returnDay = $todos.map((todo) => todo.created_at.slice(8, 10));
+	// $: returnDay = $todos.map((todo) => todo.created_at.slice(8, 10));
   
   // getting all dates in their own clean array
 	$: dateArray = $todos.map((todo) =>
 		todo.created_at.slice(0, 10).replace(/-/g, ', ')
 	);
-
-	$: compare = compareFunction(dateArray);
-
+  
   //function for comparing dates in the dateArray to see if they're desc or ascending
-  function compareFunction(array) {
+  const compareFunction = (array) => {
     let arr = [];
     for (let index = 0; index < array.length; index++) {
-    arr.push(compareDesc(new Date(array[index]), new Date(array[index + 1])));
+      arr.push(compareDesc(new Date(array[index]), new Date(array[index + 1])));
     }
     return arr;
   }
+  
+  $: compare = compareFunction(dateArray);
 
   //now going to use the compare array, and if date is ascending(meaning value = 1), then add that to streak
   $: streak = compare.filter(value => value == 1).length + 1;
