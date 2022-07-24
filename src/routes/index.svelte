@@ -5,7 +5,18 @@
 	import format from 'date-fns/format';
 	import compareDesc from 'date-fns/compareDesc';
 
-	// $: returnDay = $todos.map((todo) => todo.created_at.slice(8, 10));
+	// get minutes from each DB entry into own array
+	$: minutesArray = $todos.map(entry => entry.minutes);
+
+	// sum function to pass into reduce
+	const totalMinutes = (total, minutes) => {
+		return total + minutes;
+	}
+
+	// reduce minutes array to total minutes
+	$: totalMins = minutesArray.reduce(totalMinutes, 0);
+	// convert to hours w 2 decimal places
+	$: totalHours = ((totalMins / 60).toFixed(2) + " hours")
   
   // getting all dates in their own clean array
 	$: dateArray = $todos.map((todo) =>
@@ -14,11 +25,11 @@
   
   //function for comparing dates in the dateArray to see if they're desc or ascending
   const compareFunction = (array) => {
-    let arr = [];
+    let result = [];
     for (let index = 0; index < array.length; index++) {
-      arr.push(compareDesc(new Date(array[index]), new Date(array[index + 1])));
+      result.push(compareDesc(new Date(array[index]), new Date(array[index + 1])));
     }
-    return arr;
+    return result;
   }
   
   $: compare = compareFunction(dateArray);
@@ -40,6 +51,8 @@
 	<!-- <p>{dateArray}</p> -->
 	<p>{compare}</p>
 	<p>You are currently on a {streak}-day streak!</p>
+	<!-- <p>{minutesArray}</p> -->
+	<p>You've meditated a total of {totalHours}!</p>
 
 	<p>{totalSessions} entries</p>
 	<p>{hour} long sessions</p>
