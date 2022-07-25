@@ -1,12 +1,12 @@
 <script>
-	import TodoForm from '../components/TodoForm.svelte';
-	import Todo from '../components/Todo.svelte';
-	import { todos } from '../stores/todoStore';
+	import EntryForm from '../components/entryForm.svelte';
+	import Entry from '../components/Entry.svelte';
+	import { entries } from '../stores/entrystore';
 	import format from 'date-fns/format';
 	import compareDesc from 'date-fns/compareDesc';
 
 	// get minutes from each DB entry into own array
-	$: minutesArray = $todos.map(entry => entry.minutes);
+	$: minutesArray = $entries.map(entry => entry.minutes);
 
 	// sum function to pass into reduce
 	const totalMinutes = (total, minutes) => {
@@ -19,8 +19,8 @@
 	$: totalHours = ((totalMins / 60).toFixed(2) + " hours")
   
   // getting all dates in their own clean array
-	$: dateArray = $todos.map((todo) =>
-		todo.created_at.slice(0, 10).replace(/-/g, ', ')
+	$: dateArray = $entries.map((entry) =>
+		entry.created_at.slice(0, 10).replace(/-/g, ', ')
 	);
   
   //function for comparing dates in the dateArray to see if they're desc or ascending
@@ -39,9 +39,9 @@
 
 	// $: compareArray = returnDate.filter((date))
 
-	$: totalSessions = $todos.length;
+	$: totalSessions = $entries.length;
 
-	$: hour = $todos.filter((todo) => todo.minutes >= 60).length;
+	$: hour = $entries.filter((entry) => entry.minutes >= 60).length;
 </script>
 
 <main>
@@ -56,8 +56,8 @@
 
 	<p>{totalSessions} entries</p>
 	<p>{hour} long sessions</p>
-	<TodoForm />
-	{#each $todos as todo}
-		<Todo {todo} index={todo.id} />
+	<EntryForm />
+	{#each $entries as entry}
+		<Entry entry={entry} index={entry.id} />
 	{/each}
 </main>

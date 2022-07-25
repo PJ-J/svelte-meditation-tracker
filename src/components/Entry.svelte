@@ -1,16 +1,16 @@
 <script>
-export let todo;
+export let entry;
 import Index from '../routes/index.svelte';
-import {deleteTodo, toggleTodoCompleted} from '../stores/todoStore.js';
-import TodoForm from './TodoForm.svelte';
+import {deleteEntry, toggleEntryCompleted} from '../stores/entrystore.js';
+import entryForm from './entryForm.svelte';
 import format from 'date-fns/format';
 
 
 const minsOrHours = (minutes) => {
     if (minutes < 60) {
-        return (todo.minutes + " minutes");
+        return (entry.minutes + " minutes");
     } else {
-        return ((todo.minutes / 60).toFixed(2) + " hour")
+        return ((entry.minutes / 60).toFixed(2) + " hour")
     }
 }
 
@@ -26,21 +26,21 @@ const minsOrHours = (minutes) => {
   <input
       name="completed"
       type="checkbox"
-      checked={todo.completed}
-      on:change={() => toggleTodoCompleted(todo.id, todo.completed)}
+      checked={entry.completed}
+      on:change={() => toggleEntryCompleted(entry.id, entry.completed)}
       class="mr-2 form-checkbox h-5 w-5"
   />
   <span
       class={`flex-1 text-gray-800  ${
-          todo.completed ? 'line-through' : ''
+          entry.completed ? 'line-through' : ''
       }`}
   >
-    {minsOrHours(todo.minutes)}, {format((new Date(todo.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}
+    {minsOrHours(entry.minutes)}, {format((new Date(entry.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}
   </span>
   <button
       type="button"
       class="text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"
-      on:click={() => deleteTodo(todo.id)}
+      on:click={() => deleteEntry(entry.id)}
   >
       Delete
   </button>
