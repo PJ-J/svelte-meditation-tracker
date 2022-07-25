@@ -1,8 +1,7 @@
 <script>
 export let entry;
-import Index from '../routes/index.svelte';
+export let index;
 import {deleteEntry, toggleEntryCompleted} from '../stores/entrystore.js';
-import entryForm from './entryForm.svelte';
 import format from 'date-fns/format';
 
 
@@ -12,17 +11,12 @@ const minsOrHours = (minutes) => {
     } else {
         return ((entry.minutes / 60).toFixed(2) + " hour")
     }
-}
+};
 
-
-
-
-
-  
 </script>
 
 
-<li class="bg-white flex items-center shadow-sm border border-gray-200 rounded-lg my-2 py-2 px-4">
+<li index={index} class="bg-white flex items-center shadow-sm border border-gray-200 rounded-lg my-2 py-2 px-4">
   <input
       name="completed"
       type="checkbox"
@@ -35,7 +29,7 @@ const minsOrHours = (minutes) => {
           entry.completed ? 'line-through' : ''
       }`}
   >
-    {minsOrHours(entry.minutes)}, {format((new Date(entry.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}
+    {minsOrHours(entry.minutes)}, {format((new Date(entry.created_at.slice(0,10).replace(/-/g, ", "))), 'MM/dd/yyyy')}, {entry.id}
   </span>
   <button
       type="button"

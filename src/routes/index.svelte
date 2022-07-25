@@ -1,6 +1,7 @@
 <script>
 	import EntryForm from '../components/entryForm.svelte';
 	import Entry from '../components/Entry.svelte';
+	import index from '../components/Entry.svelte';
 	import { entries } from '../stores/entrystore';
 	import format from 'date-fns/format';
 	import compareDesc from 'date-fns/compareDesc';
@@ -58,6 +59,6 @@
 	<p>{hour} long sessions</p>
 	<EntryForm />
 	{#each $entries as entry}
-		<Entry entry={entry} index={entry.id} />
+		<Entry {entry} index={entry.id} />
 	{/each}
 </main>
