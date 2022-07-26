@@ -18,7 +18,7 @@ user.set(supabase.auth.user());
   
 </script>
 
-<div class ="container mx-auto my-6 max-w-lg">
+<div class ="container mx-auto my-6 max-w-2xl">
   {#if $user}
   <Navbar/>
   <slot></slot>

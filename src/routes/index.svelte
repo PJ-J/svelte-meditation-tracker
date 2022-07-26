@@ -45,11 +45,13 @@
 	$: hour = $entries.filter((entry) => entry.minutes >= 60).length;
 </script>
 
-<main>
-	<h1 class="text-2xl font-bold text-center text-gray-800 md:text-3xl">Meditation Tracker</h1>
+<main class="md:container md:mx-auto">
+	<h1 class="text-2xl font-sans font-bold text-center md:text-3xl">Meditation Tracker</h1>
 
 	<!-- <p>{returnDay}</p> -->
 	<!-- <p>{dateArray}</p> -->
+
+	<EntryForm />
 	<p>{compare}</p>
 	<p>You are currently on a {streak}-day streak!</p>
 	<!-- <p>{minutesArray}</p> -->
@@ -57,7 +59,6 @@
 
 	<p>{totalSessions} entries</p>
 	<p>{hour} long sessions</p>
-	<EntryForm />
 	{#each $entries as entry}
 		<Entry {entry} index={entry.id} />
 	{/each}
