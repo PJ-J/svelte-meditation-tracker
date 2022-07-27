@@ -46,7 +46,7 @@
 </script>
 
 <main class="md:container md:mx-auto">
-	<h1 class="text-2xl font-sans font-bold text-center md:text-3xl">Meditation Tracker</h1>
+	<h1 class="text-2xl font-bold text-center md:text-3xl">Meditation Tracker</h1>
 
 	<!-- <p>{returnDay}</p> -->
 	<!-- <p>{dateArray}</p> -->

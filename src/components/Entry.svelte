@@ -16,7 +16,7 @@ const minsOrHours = (minutes) => {
 </script>
 
 
-<li index={index} class="bg-white flex items-center shadow-sm border border-gray-200 rounded-lg my-2 py-2 px-4">
+<li index={index} class="flex items-center shadow-sm border border-gray-200 rounded-lg my-2 py-2 px-4">
   <input
       name="completed"
       type="checkbox"
@@ -25,7 +25,7 @@ const minsOrHours = (minutes) => {
       class="mr-2 form-checkbox h-5 w-5"
   />
   <span
-      class={`flex-1 text-gray-800  ${
+      class={`flex-1 ${
           entry.completed ? 'line-through' : ''
       }`}
   >
