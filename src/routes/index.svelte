@@ -7,6 +7,7 @@
 	import compareDesc from 'date-fns/compareDesc';
 	import { slide } from 'svelte/transition';
 	export let open = false;
+	export let nameOfHeader = "Entry List"
 	export let onClick = () => {
 		open = !open;
 	};
@@ -60,10 +61,16 @@
 		overflow: hidden;
 	}
 
+	header {
+		display: flex;
+		padding: .2rem;
+		border-radius: .2rem;
+	}
+
 	svg {
+		margin: auto;
 		height: 1rem;
-		stroke: white;
-		background-color: gray;
+		stroke: black;
 		transition: transform var(--transition-duration);
 	}
 
@@ -89,7 +96,7 @@
 	<p>{hour} long sessions</p>
 	<section>
 		<button on:click={onClick}>
-			<header {onClick} class="pl-4 flex bg-gray-500 rounded">
+			<header {onClick} class="bg-tile bg-cover text-black">
 				<svg
 					
 					class={open}
@@ -102,7 +109,7 @@
 				>
 					<path d="M19 9l-7 7-7-7" />
 				</svg>
-				Entry List
+				 {nameOfHeader}
 			</header>
 		</button>
 		{#if open}
