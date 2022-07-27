@@ -5,12 +5,11 @@
 	import { entries } from '../stores/entrystore';
 	import format from 'date-fns/format';
 	import compareDesc from 'date-fns/compareDesc';
-	import { slide } from 'svelte/transition'
-	import Chevron from "../components/Chevron.svelte";
-	export let open = true;
-	let onClick = () => {
-    open = !open;
-  };
+	import { slide } from 'svelte/transition';
+	export let open = false;
+	export let onClick = () => {
+		open = !open;
+	};
 
 	// get minutes from each DB entry into own array
 	$: minutesArray = $entries.map((entry) => entry.minutes);
@@ -49,6 +48,31 @@
 	$: hour = $entries.filter((entry) => entry.minutes >= 60).length;
 </script>
 
+<style>
+	:root {
+		--transition-duration: 500ms;
+	}
+
+	button {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	svg {
+		height: 1rem;
+		stroke: white;
+		background-color: gray;
+		transition: transform var(--transition-duration);
+	}
+
+	.true {
+		transform: rotate(180deg);
+	}
+</style>
+
+
 <main class="md:container md:mx-auto">
 	<h1 class="text-2xl font-bold text-center md:text-3xl">Meditation Tracker</h1>
 
@@ -64,15 +88,29 @@
 	<p>{totalSessions} entries</p>
 	<p>{hour} long sessions</p>
 	<section>
-		<header class="flex bg-gray-500 rounded">
-			<Chevron {open} {onClick} /> Entry List
-		</header>
+		<button on:click={onClick}>
+			<header {onClick} class="pl-4 flex bg-gray-500 rounded">
+				<svg
+					
+					class={open}
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="3"
+				>
+					<path d="M19 9l-7 7-7-7" />
+				</svg>
+				Entry List
+			</header>
+		</button>
 		{#if open}
-		<div transition:slide={{ duration: 500}}>
-			{#each $entries as entry}
-				<Entry {entry} index={entry.id} />
-			{/each}
-		</div>
+			<div transition:slide={{ duration: 500 }}>
+				{#each $entries as entry}
+					<Entry {entry} index={entry.id} />
+				{/each}
+			</div>
 		{/if}
 	</section>
 </main>
