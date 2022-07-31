@@ -1,13 +1,13 @@
 <script>
 	import EntryForm from '../components/EntryForm.svelte';
 	import Entry from '../components/Entry.svelte';
-	import index from '../components/Entry.svelte';
 	import { entries } from '../stores/entrystore';
-	import format from 'date-fns/format';
-	import compareDesc from 'date-fns/compareDesc';
+	import formatDistance from 'date-fns/formatDistance';
 	import { slide } from 'svelte/transition';
 	export let open = false;
-	export let nameOfHeader = "Entry List"
+	export let nameOfHeader = 'Entry List';
+	import { fade, blur, fly } from "svelte/transition";
+	let isActive = true;
 	export let onClick = () => {
 		open = !open;
 	};
@@ -28,30 +28,96 @@
 	// getting all dates in their own clean array
 	$: dateArray = $entries.map((entry) => entry.created_at.slice(0, 10).replace(/-/g, ', '));
 
-	//function for comparing dates in the dateArray to see if they're desc or ascending
-	const compareFunction = (array) => {
-		let result = [];
-		for (let index = 0; index < array.length; index++) {
-			result.push(compareDesc(new Date(array[index]), new Date(array[index + 1])));
+	//function for looking through date array from r to l to see interval between dates
+	const checkInterval = (array) => {
+		let intervals = [];
+		for (let i = array.length - 1; i > 0; i--) {
+			intervals.push(formatDistance(new Date(array[i]), new Date(array[i - 1])));
 		}
-		return result;
+		return intervals;
 	};
 
-	$: compare = compareFunction(dateArray);
+	$: dateIntervals = checkInterval(dateArray);
 
-	//now going to use the compare array, and if date is ascending(meaning value = 1), then add that to streak
-	$: streak = compare.filter((value) => value == 1).length + 1;
+	//function for comparing date intervals
+	const checkStreak = (array) => {
+		let count = 1;
+		for (let i = 0; i < array.length; i++) {
+			if (array[i] == '1 day') {
+				count++;
+			} else {
+				return count;
+			}
+		}
+		return count;
+	};
 
-	// $: compareArray = returnDate.filter((date))
-
+	// pass dateIntervals to checkStreak function
+	$: streak = checkStreak(dateIntervals);
 	$: totalSessions = $entries.length;
 
 	$: hour = $entries.filter((entry) => entry.minutes >= 60).length;
 </script>
 
+<main class="md:container md:mx-auto">
+	<div class="flex space-x-40 h-28">
+	{#if isActive}
+		<div class="box" transition:fly={{ x:-100}} />
+	{/if}
+	<button on:click={() => (isActive = !isActive)}
+		>{#if isActive}Hide Box{:else}Show Box{/if}
+	</button>
+</div>
+	<h1 class="text-2xl font-bold text-center md:text-3xl">Meditation Tracker</h1>
+
+	<!-- <p>{returnDay}</p> -->
+	<!-- <p>{dateArray}</p> -->
+
+	<EntryForm />
+	<!-- <p>{compare}</p> -->
+	<p>You are currently on a {streak}-day streak!</p>
+
+	<!-- <p>{dateIntervals}</p> -->
+	<p>You've meditated a total of {totalHours}!</p>
+
+	<p>{totalSessions} entries</p>
+	<p>{hour} long sessions</p>
+	<section>
+		<button on:click={onClick}>
+			<header {onClick} class="bg-tile bg-cover text-black">
+				<svg
+					class={open}
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="3"
+				>
+					<path d="M19 9l-7 7-7-7" />
+				</svg>
+				{nameOfHeader}
+			</header>
+		</button>
+		{#if open}
+			<div transition:slide={{ duration: 500 }}>
+				{#each $entries as entry}
+					<Entry {entry} index={entry.id} />
+				{/each}
+			</div>
+		{/if}
+	</section>
+</main>
+
 <style>
 	:root {
 		--transition-duration: 500ms;
+	}
+
+	.box {
+		height: 100px;
+		width: 100px;
+		background-color: red;
 	}
 
 	button {
@@ -63,8 +129,8 @@
 
 	header {
 		display: flex;
-		padding: .2rem;
-		border-radius: .2rem;
+		padding: 0.2rem;
+		border-radius: 0.2rem;
 	}
 
 	svg {
@@ -78,46 +144,3 @@
 		transform: rotate(180deg);
 	}
 </style>
-
-
-<main class="md:container md:mx-auto">
-	<h1 class="text-2xl font-bold text-center md:text-3xl">Meditation Tracker</h1>
-
-	<!-- <p>{returnDay}</p> -->
-	<!-- <p>{dateArray}</p> -->
-
-	<EntryForm />
-	<p>{compare}</p>
-	<p>You are currently on a {streak}-day streak!</p>
-	<!-- <p>{minutesArray}</p> -->
-	<p>You've meditated a total of {totalHours}!</p>
-
-	<p>{totalSessions} entries</p>
-	<p>{hour} long sessions</p>
-	<section>
-		<button on:click={onClick}>
-			<header {onClick} class="bg-tile bg-cover text-black">
-				<svg
-					
-					class={open}
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="3"
-				>
-					<path d="M19 9l-7 7-7-7" />
-				</svg>
-				 {nameOfHeader}
-			</header>
-		</button>
-		{#if open}
-			<div transition:slide={{ duration: 500 }}>
-				{#each $entries as entry}
-					<Entry {entry} index={entry.id} />
-				{/each}
-			</div>
-		{/if}
-	</section>
-</main>
